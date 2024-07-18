@@ -1,0 +1,39 @@
+<div class="search-filter-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Search by Name</mat-label>
+    <input matInput [(ngModel)]="searchText" placeholder="Enter user name" (input)="onSearch()" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Filter by Workout Type</mat-label>
+    <mat-select [(ngModel)]="filterType" (selectionChange)="onFilterChange()">
+      <mat-option value="">All</mat-option>
+      <mat-option value="Running">Running</mat-option>
+      <mat-option value="Swimming">Swimming</mat-option>
+      <mat-option value="Cycling">Cycling</mat-option>
+      <mat-option value="Yoga">Yoga</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<table mat-table [dataSource]="paginatedUsers" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let user"> {{user.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="workouts">
+    <th mat-header-cell *matHeaderCellDef> Workouts </th>
+    <td mat-cell *matCellDef="let user">
+      <div *ngFor="let workout of user.workouts">
+        {{workout.type}}: {{workout.minutes}} mins
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [length]="filteredUsers.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="onPageChange($event)">
+</mat-paginator>
